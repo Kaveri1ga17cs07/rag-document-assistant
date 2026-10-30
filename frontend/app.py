@@ -1,5 +1,10 @@
+import sys
+
 import streamlit as st
 import os
+# Tell Python to include the parent root directory when searching for modules
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import shutil
 # Bypassing FastAPI network layer to communicate directly with your engine
 from backend.rag_engine import process_pdf, answer_query
