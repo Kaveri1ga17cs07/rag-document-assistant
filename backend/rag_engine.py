@@ -3,11 +3,10 @@ from dotenv import load_dotenv
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
-from langchain_chroma import Chroma  # Updated from langchain_community.vectorstores
-from langchain_classic.chains import create_retrieval_chain  # Moved to langchain_classic
-from langchain_classic.chains.combine_documents import create_stuff_documents_chain  # Moved to langchain_classic
+from langchain_chroma import Chroma
+from langchain_classic.chains import create_retrieval_chain
+from langchain_classic.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
-
 
 load_dotenv()
 
@@ -19,8 +18,8 @@ def process_pdf(file_path: str):
     """Parses PDF, chunks text, and builds the Chroma vector database index."""
     global vector_store
     
-    # 1. Load the text from the PDF file
-    loader = PyPDFLoader(r"C:\Users\shrid\Downloads\rag_evaluation.pdf")
+    # 1. Load the text dynamically using the uploaded file path (FIXED)
+    loader = PyPDFLoader(file_path)
     docs = loader.load()
     
     # 2. Split text into manageable token chunks
@@ -48,9 +47,9 @@ def answer_query(question: str):
         else:
             return "No documents uploaded yet. Please upload a PDF before asking questions."
             
-    # 4. Initialize RAG components (Retriever & Generation Model)
+    # 4. Initialize RAG components (FIXED model name to a production standard)
     retriever = vector_store.as_retriever(search_kwargs={"k": 4})
-    llm = ChatOpenAI(model="gpt-5.4-mini", temperature=0)
+    llm = ChatOpenAI(model="gpt-4o-mini", temperature=0)
     
     # Define prompt template enforcing context boundaries
     system_prompt = (

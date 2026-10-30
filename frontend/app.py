@@ -1,11 +1,11 @@
 import sys
-
-import streamlit as st
 import os
+import shutil
+
 # Tell Python to include the parent root directory when searching for modules
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-import shutil
+import streamlit as st
 # Bypassing FastAPI network layer to communicate directly with your engine
 from backend.rag_engine import process_pdf, answer_query
 
@@ -16,7 +16,7 @@ st.title("📚 Interactive RAG PDF Assistant")
 UPLOAD_DIR = "data/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# --- SIDEBAR: Document ingestion panel ---
+# --- SIDEBAR: Document Ingestion Panel ---
 with st.sidebar:
     st.header("Document Operations Manager")
     uploaded_file = st.file_uploader("Upload target document (PDF)", type=["pdf"])
@@ -37,7 +37,7 @@ with st.sidebar:
                 except Exception as e:
                     st.sidebar.error(f"Ingestion Error: {str(e)}")
 
-# --- MAIN PAGE: Conversational interface UI loop ---
+# --- MAIN PAGE: Conversational Interface UI Loop ---
 if "messages" not in st.session_state:
     st.session_state.messages = [{"role": "assistant", "content": "Document uploaded? Ask me questions below!"}]
 
